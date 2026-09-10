@@ -24,8 +24,10 @@ jobs:
 
       - run: npm ci
 
+      # `next typegen` writes the generated route types (LayoutProps, PageProps)
+      # that tsc needs but that only exist after a build.
       - name: Typecheck
-        run: npx tsc --noEmit
+        run: npm run typecheck
 
       - name: Lint
         run: npm run lint
