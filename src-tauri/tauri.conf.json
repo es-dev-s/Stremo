@@ -1,7 +1,7 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "Stremo",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "identifier": "com.stremo.app",
   "build": {
     "frontendDist": "../out",
@@ -51,7 +51,13 @@
   "bundle": {
     "active": true,
     "createUpdaterArtifacts": true,
-    "targets": ["nsis", "msi", "appimage", "deb", "rpm"],
+    "targets": [
+      "nsis",
+      "msi",
+      "appimage",
+      "deb",
+      "rpm"
+    ],
     "category": "Business",
     "shortDescription": "Stremo live workspace screens",
     "longDescription": "Stremo lets superadmins view workspaces and stream agent screens in real time.",

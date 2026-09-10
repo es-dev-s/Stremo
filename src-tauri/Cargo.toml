@@ -1,6 +1,6 @@
 [package]
 name = "stremo"
-version = "0.1.0"
+version = "0.1.1"
 description = "Stremo desktop"
 authors = ["Stremo"]
 edition = "2021"
