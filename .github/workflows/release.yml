@@ -105,12 +105,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Decode / repair the secret so Tauri always sees a minisign key with
+      # the `untrusted comment:` header. An empty password secret must not be
+      # forwarded — that is the usual cause of:
+      #   incorrect updater private key password: Missing comment in secret key
+      - name: Prepare updater signing key
+        shell: bash
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: |
+          if command -v python3 >/dev/null 2>&1; then PY=python3; else PY=python; fi
+          "$PY" scripts/prepare-updater-key.py
+
       - name: Build and upload
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
           NEXT_PUBLIC_SIGNALING_URL: ${{ vars.NEXT_PUBLIC_SIGNALING_URL }}
           NEXT_PUBLIC_WS_CONNECT_TOKEN: ${{ secrets.NEXT_PUBLIC_WS_CONNECT_TOKEN }}
         with:
