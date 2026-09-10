@@ -43,5 +43,6 @@ yarn-error.log*
 # updater signing keys — never commit
 *.key
 *.key.pub
+*.password
 /.gotmp
 /.gocache
