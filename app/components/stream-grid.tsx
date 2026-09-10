@@ -42,6 +42,7 @@ function VideoPane({
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const live = view?.status === "live";
+  const clientId = client?.id ?? null;
 
   useEffect(() => {
     const node = videoRef.current;
@@ -49,7 +50,7 @@ function VideoPane({
       return;
     }
     const attach = () => {
-      const stream = client ? mediaFor(client.id) : null;
+      const stream = clientId != null ? mediaFor(clientId) : null;
       if (node.srcObject !== stream) {
         node.srcObject = stream;
         if (stream) {
@@ -59,7 +60,7 @@ function VideoPane({
     };
     attach();
     return subscribeStreams(attach);
-  }, [client?.id, view?.status]);
+  }, [clientId, view?.status]);
 
   const waiting = client && client.status !== "sharing";
   const connecting = client && client.status === "sharing" && view?.status !== "error" && !live;
@@ -198,7 +199,10 @@ export function StreamGrid({ onLeave }: { onLeave: () => void | Promise<void> })
   const [slot, setSlot] = useState<number | null>(null);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const slotRef = useRef<number | null>(null);
-  slotRef.current = slot;
+
+  useEffect(() => {
+    slotRef.current = slot;
+  }, [slot]);
 
   const selected = data.screenSlots;
   const selectedIds = useMemo(
@@ -220,6 +224,9 @@ export function StreamGrid({ onLeave }: { onLeave: () => void | Promise<void> })
       return;
     }
     void watchRoster(targets, token, data.transport, 4);
+    // rosterKey stands in for `targets`: a new array identity on every roster
+    // refresh would retrigger the watch and churn the peer connections.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, rosterKey, data.transport]);
 
   useEffect(() => {

@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
@@ -8,6 +7,7 @@ import { ArrowUpRight, Building2 } from "lucide-react";
 import { cardReveal, stagger } from "../lib/motion";
 import { prepareScreens } from "../lib/backend/store";
 import { useWorkspaceData } from "../lib/backend/use-platform";
+import { useIsClient } from "../lib/use-is-client";
 import { agentLabel, agentTone, type Workspace } from "../lib/data";
 import { AgentAvatar, Meter, StatusPill } from "./agent-avatar";
 import { HomeSkeleton } from "./skeleton";
@@ -23,11 +23,8 @@ function todayLabel() {
 export function HomeBoard() {
   const router = useRouter();
   const data = useWorkspaceData();
-  const [today, setToday] = useState("");
-
-  useEffect(() => {
-    setToday(todayLabel());
-  }, []);
+  // Rendered only after hydration; the server locale/date would not match.
+  const today = useIsClient() ? todayLabel() : "";
 
   function openScreens() {
     prepareScreens();

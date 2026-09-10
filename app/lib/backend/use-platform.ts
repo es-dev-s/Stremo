@@ -10,9 +10,9 @@ export function usePlatform() {
 
 export function useWorkspaceData() {
   const state = usePlatform();
-  const query = state.search;
 
   return useMemo(() => {
+    const query = state.search;
     const agents = state.clients.map(mapAgent);
     const admins = state.leads.map(mapAdmin);
     const workspaces = state.orgs.map((org) => mapWorkspace(org, agents));

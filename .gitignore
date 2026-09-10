@@ -39,3 +39,9 @@ yarn-error.log*
 # rust / tauri
 /src-tauri/target
 /src-tauri/gen
+
+# updater signing keys — never commit
+*.key
+*.key.pub
+/.gotmp
+/.gocache

@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Rust build output contains generated JS that is not ours to lint.
+    "src-tauri/target/**",
+    "src-tauri/gen/**",
   ]),
 ]);
 
